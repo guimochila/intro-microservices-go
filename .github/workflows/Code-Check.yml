@@ -1,0 +1,48 @@
+
+name: Code Checks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/*.go"
+
+jobs:
+  required:
+    name: Validate Code
+    needs: [golangci-lint]
+    runs-on: ubuntu-latest
+    steps: [run: echo OK]
+  detect-modules:
+    runs-on: ubuntu-latest
+    outputs:
+      modules: ${{ steps.set-modules.outputs.modules }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Go 
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+      - id: set-modules
+        run: echo "modules=$(go list -m -json | jq -s '.' | jq -c '[.[].Dir]')" >> $GITHUB_OUTPUT
+  golangci-lint:
+    needs: detect-modules
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        modules: ${{ fromJSON(needs.detect-modules.outputs.modules) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Go 
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+      - name: golangci-lint ${{ matrix.modules }}
+        uses: golangci/golangci-lint-action@v6
+        with:
+          install-mode: "binary"
+          version: latest
+          only-new-issues: true
+          args: --timeout 5m

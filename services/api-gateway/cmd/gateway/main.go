@@ -1,14 +1,14 @@
+// Copyright (c) 2025, guimochila.com. Continuous Learning.
+
 package main
 
 import "net/http"
 
 func main() {
-
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/customer/payment/authorize", customerPaymentAuthorize)
 	http.HandleFunc("/customer/payment/capture", customerPaymentCapture)
 	http.HandleFunc("/customer/ledger", customerLedger)
-
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
