@@ -11,18 +11,7 @@ func main() {
 	http.HandleFunc("/customer/ledger", customerLedger)
 }
 
-func login(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func customerPaymentAuthorize(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func customerPaymentCapture(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func customerLedger(w http.ResponseWriter, r *http.Request) {
-
-}
+func login(w http.ResponseWriter, r *http.Request)                    {}
+func customerPaymentAuthorize(w http.ResponseWriter, r *http.Request) {}
+func customerPaymentCapture(w http.ResponseWriter, r *http.Request)   {}
+func customerLedger(w http.ResponseWriter, r *http.Request)           {}
