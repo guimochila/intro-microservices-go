@@ -1,6 +1,6 @@
 go 1.24.0
 
 use (
-	./api-gateway
-	./auth
+	./services/api-gateway
+	./services/auth
 )

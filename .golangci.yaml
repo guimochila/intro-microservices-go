@@ -1,0 +1,133 @@
+# Copyright (c) 2025, guimochila.com. ContinuousLearning.
+
+# Defines the configuration version.
+version: "2"
+
+# Severity configuration
+severity:
+  # Set the default severity for issues.
+  default: error
+
+# Output configuration options
+output:
+  # The formats used to render issues.
+  formats:
+    # Prints issues in a text format with colors, line number, and linter name.
+    text:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      path: stderr
+      # Print linter name in the end of issue text.
+      print-linter-name: true
+      # Print lines of code with issue.
+      print-issued-lines: true
+      # Use colors.
+      colors: true
+    # Prints issues in the SARIF format.
+    sarif:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      path: golangci-lint.sarif
+  # Order to use when sorting results.
+  sort-order:
+    - linter
+    - file
+
+formatters:
+  enable:
+    - gofumpt
+
+# Linters configuration
+linters:
+  # Default set of linters.
+  # Using 'standard' which enables the default set of linters, similar to the presets approach.
+  default: standard
+
+  # https://golangci-lint.run/usage/linters/#enabled-by-default
+  enable:
+    - goheader
+    - revive
+    - gosec
+    - errname
+    # Additional linters from presets (bugs, comment, complexity, error, format, import,
+    # metalinter, module, performance, sql, style, test, unused)
+    # Most of these are now enabled by default with 'standard'
+    - dupl
+    - godox
+    - funlen
+    - lll
+
+  # https://golangci-lint.run/usage/linters/#disabled-by-default
+  disable:
+    - depguard
+    - gomoddirectives
+    - tagliatelle
+    - testpackage
+
+  # All available settings of specific linters.
+  settings:
+    dupl:
+      # tokens count to trigger issue, 150 by default
+      threshold: 200
+    godox:
+      keywords: ["BUG", "FIXME"]
+    goheader:
+      values:
+        const:
+          COMPANY: guimochila.com
+      template: |-
+        Copyright (c) {{ YEAR }}, {{ COMPANY }}. Continuous Learning.
+    funlen:
+      ignore-comments: true
+      # Does not support severity setting
+      lines: -1
+      statements: 50
+    lll:
+      line-length: 120
+      tab-width: 2
+    revive:
+      severity: error
+      confidence: 0.8
+      rules:
+        - name: var-naming
+          severity: warning
+          disabled: false
+          exclude: [""]
+          arguments:
+            - ["ID"] # AllowList
+            - ["VM"] # DenyList
+            - - upperCaseConst: true # Extra parameter (upperCaseConst|skipPackageNameChecks)
+
+  # Defines a set of rules to ignore issues.
+  exclusions:
+    # Mode of the generated files analysis.
+    generated: lax
+    # Predefined exclusion rules.
+    presets:
+      - comments
+      - std-error-handling
+      - common-false-positives
+    # Which file paths to exclude: they will be analyzed, but issues from them won't be reported.
+    paths:
+      - "deployments/.*"
+      - "pkg/api/.*"
+      - '.*\.connect\.go$'
+      - '.*\.pb\.go$'
+      - '.*\.gen\.go$'
+    # Excluding configuration per-path, per-linter, per-text and per-source.
+    rules:
+      - path: _test\.go
+        linters:
+          - funlen
+
+# Issues configuration
+issues:
+  # Maximum issues count per one linter.
+  # Set to 0 to disable.
+  max-issues-per-linter: 0
+  # Maximum count of issues with the same text.
+  # Set to 0 to disable.
+  max-same-issues: 0
+  # Show only new issues: if there are unstaged changes or untracked files,
+  # only those changes are analyzed, else only changes in HEAD~ are analyzed.
+  new: false
+  # Fix found issues (if it's supported by the linter).
+  fix: false
