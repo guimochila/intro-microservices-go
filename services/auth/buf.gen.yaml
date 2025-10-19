@@ -1,0 +1,21 @@
+# Copyright (c) 2025, guimochila.com. Continuous Learning.
+
+version: v2
+clean: true
+managed:
+  enabled: true
+  disable:
+    - module: buf.build/bufbuild/protovalidate
+  override:
+    - file_option: go_package_prefix
+      value: github.com/guimochila/intro-microservices-go/services/auth/api
+plugins:
+  - remote: buf.build/protocolbuffers/go
+    out: services/auth/api
+    opt: paths=source_relative
+  - remote: buf.build/connectrpc/go
+    out: services/auth/api
+    opt: paths=source_relative
+
+inputs:
+  - directory: api/auth

@@ -22,7 +22,7 @@ func main() {
 
 	dsn := fmt.Sprintf("%s:%s@tcp(localhost:3306)/%s", dbUser, dbPassword, dbName)
 
-	db, err = sql.Open("mysql", dsn)
+	db, err = sql.Open(dbDriver, dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,8 +33,7 @@ func main() {
 		}
 	}()
 
-	err = db.Ping()
-	if err != nil {
+	if err := db.Ping(); err != nil {
 		log.Fatal(err)
 	}
 }

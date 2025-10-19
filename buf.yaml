@@ -1,0 +1,16 @@
+version: v2
+breaking:
+  use:
+    - FILE
+lint:
+  # service_suffix: Handler
+  use:
+    - STANDARD
+  ignore:
+    - buf.build/bufbuild/protovalidate
+
+deps:
+  - buf.build/bufbuild/protovalidate
+
+modules:
+  - path: api/auth

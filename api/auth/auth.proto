@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/guimochila/intro-to-microservices/services/auth/proto/pb";
+option go_package = "github.com/guimochila/intro-microservices-go/auth/api";
 
 service AuthService {
   rpc GetToken(Credentials) returns (Token) {}
@@ -10,9 +10,8 @@ service AuthService {
 message Token {
   string jwt = 1;
 }
-
 message Credentials {
-  string userName = 1;
+  string username = 1;
   string password = 2;
 }
 
